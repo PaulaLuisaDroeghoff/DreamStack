@@ -1,9 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-
 import { useNavigate } from "react-router-dom";
 import { Button } from "./components/ui/button";
-
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import {
   DropdownMenu,
@@ -14,42 +12,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
-import { User, Send, Home, Wallet, Settings, LogOut } from "lucide-react";
+import { User, Send, Home, Wallet, Settings, LogOut, Goal } from "lucide-react";
 
-const NavigationSidebar = () => {
+const TopNavigation = ({ user, onSignOut }) => {
   const navigate = useNavigate();
   const navItems = [
-    { icon: Home, label: "Dashboard", path: "/" },
-    { icon: Send, label: "Transfer", path: "/transfer" },
-    { icon: Wallet, label: "Accounts", path: "/accounts" },
-    { icon: Settings, label: "Settings", path: "/settings" },
+    { icon: Wallet, label: "BudgetPlanning", path: "/budgetplanning" },
+    { icon: Goal, label: "Saving Goals", path: "/savings" },
+    { icon: Settings, label: "Account Management", path: "/accountmanagement" },
   ];
 
   return (
-    <div className="bg-gray-50 w-64 border-r p-4 h-screen">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">MoneyFlow</h1>
+    <header className="bg-white border-b p-4 flex justify-between items-center">
+      <div className="flex items-center">
+        <img src="./favicon.ico" alt="DreamStack" className="h-6 mr-2" />
+        <h1 className="text-2xl font-bold text-gray-800 mr-8">DreamStack</h1>
+        <nav className="flex space-x-2">
+          {navItems.map((item) => (
+            <Button
+              key={item.path}
+              variant="ghost"
+              className="justify-start"
+              onClick={() => navigate(item.path)}
+            >
+              <item.icon className="mr-2 h-4 w-4" />
+              {item.label}
+            </Button>
+          ))}
+        </nav>
       </div>
-      <nav className="space-y-2">
-        {navItems.map((item) => (
-          <Button
-            key={item.path}
-            variant="ghost"
-            className="w-full justify-start"
-            onClick={() => navigate(item.path)}
-          >
-            <item.icon className="mr-2 h-4 w-4" />
-            {item.label}
-          </Button>
-        ))}
-      </nav>
-    </div>
-  );
-};
-
-const Header = ({ user, onSignOut }) => {
-  return (
-    <header className="bg-white border-b p-4 flex justify-end items-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
@@ -86,6 +77,16 @@ const Header = ({ user, onSignOut }) => {
   );
 };
 
+const Footer = () => {
+  return (
+    <footer className="bg-white py-4 text-center text-gray-500">
+      <div className="container mx-auto">
+        <p>&copy; 2024 DreamStack. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+};
+
 const App = () => {
   const user = {
     name: "John Doe",
@@ -98,14 +99,12 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <NavigationSidebar />
-      <div className="flex-1 flex flex-col">
-        <Header user={user} onSignOut={handleSignOut} />
-        <main className="flex-1 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
+    <div className="flex flex-col h-screen">
+      <TopNavigation user={user} onSignOut={handleSignOut} />
+      <main className="flex-1 overflow-y-auto">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 };
