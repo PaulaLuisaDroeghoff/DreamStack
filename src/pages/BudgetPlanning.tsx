@@ -39,7 +39,7 @@ const BudgetPlanner = () => {
     <div className="flex flex-col h-screen">
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-gray-800 mr-8">March Budget Planner</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mr-8">Budget Planner</h1>
           <button
             onClick={() => setIsModalOpen(true)}
             className="p-2 rounded-full hover:bg-gray-100"
