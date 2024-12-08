@@ -13,6 +13,7 @@ import AISavingSuggestions from "./pages/AISavingSuggestions";
 import TransactionsUtilities from "./pages/TransactionsUtilities";
 import TransactionsEntertainment from "./pages/TransactionsEntertainment";
 import TransactionsRent from "./pages/TransactionsRent";
+import TransactionsSports from "./pages/TransactionsSports";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -33,6 +34,7 @@ root.render(
           <Route path="transactionsutilities" element={<TransactionsUtilities />} />
           <Route path="transactionsentertainment" element={<TransactionsEntertainment />} />
           <Route path="transactionsrent" element={<TransactionsRent />} />
+          <Route path="transactionssports" element={<TransactionsSports />} />
         </Route>
       </Routes>
     </Router>
