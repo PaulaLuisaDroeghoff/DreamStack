@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBasket, House, ReceiptText, CarFront, RollerCoaster, Dumbbell, Calendar, Plus } from 'lucide-react';
+import { ShoppingBasket, House, ReceiptText, CarFront, RollerCoaster, Dumbbell, Calendar, Plus, Star} from 'lucide-react';
 
 interface BudgetCategory {
   icon: React.ElementType;
@@ -26,7 +26,7 @@ const BudgetPlanner = () => {
 
   const handleAddCategory = () => {
     if (newCategory.name) {
-      setCategories([...categories, { ...newCategory, icon: ShoppingBasket, amount: 0, route: `/transactions${newCategory.name.toLowerCase()}` }]);
+      setCategories([...categories, { ...newCategory, icon: Star, amount: 0, route: `/transactions${newCategory.name.toLowerCase()}` }]);
       setNewCategory({ name: '' });
       setIsModalOpen(false);
     }
