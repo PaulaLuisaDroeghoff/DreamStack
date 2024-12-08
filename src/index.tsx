@@ -14,6 +14,7 @@ import TransactionsUtilities from "./pages/TransactionsUtilities";
 import TransactionsEntertainment from "./pages/TransactionsEntertainment";
 import TransactionsRent from "./pages/TransactionsRent";
 import TransactionsSports from "./pages/TransactionsSports";
+import TransactionsExtra from "./pages/TransactionsExtra";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -35,6 +36,7 @@ root.render(
           <Route path="transactionsentertainment" element={<TransactionsEntertainment />} />
           <Route path="transactionsrent" element={<TransactionsRent />} />
           <Route path="transactionssports" element={<TransactionsSports />} />
+          <Route path="transactionsextra" element={<TransactionsExtra />} />
         </Route>
       </Routes>
     </Router>
