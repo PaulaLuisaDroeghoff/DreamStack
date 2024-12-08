@@ -40,7 +40,6 @@ const SavingGoals = () => {
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold text-gray-800 mr-4">Saving Goals</h1>
-          <Goal className="text-[#626be8] mr-2" />
           <button
             onClick={() => navigate('/add-goal')} // Direct to goal addition page
             className="p-2 rounded-full hover:bg-gray-100"
@@ -59,11 +58,14 @@ const SavingGoals = () => {
               className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center justify-center space-y-4 cursor-pointer hover:shadow-xl"
               onClick={() => navigate(goal.route)}
             >
+              {/* Goal Name */}
+              <h3 className="text-lg font-medium text-center">{goal.name}</h3>
+
               {/* Goal Image */}
               <img
                 src={goal.image}
                 alt={goal.name}
-                className="w-24 h-24 object-cover rounded-full"
+                className="w-48 h-32 object-contain"
               />
               
               {/* Circular Progress Bar (Pie Chart) */}
@@ -78,20 +80,12 @@ const SavingGoals = () => {
                   })}
                 />
               </div>
-
-              {/* Goal Name */}
-              <h3 className="text-lg font-medium text-center">{goal.name}</h3>
             </div>
           ))}
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-100 py-4 text-center text-gray-500">
-        <div className="container mx-auto">
-          <p>&copy; 2024 DreamStack. All rights reserved.</p>
-        </div>
-      </footer>
+      
     </div>
   );
 };

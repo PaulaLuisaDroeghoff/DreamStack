@@ -113,12 +113,6 @@ const BudgetPlanner = () => {
           </div>
         </div>
       </main>
-
-      <footer className="bg-gray-100 py-4 text-center text-gray-500">
-        <div className="container mx-auto">
-          <p>&copy; 2024 DreamStack. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };
