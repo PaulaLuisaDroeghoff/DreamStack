@@ -10,6 +10,9 @@ import SavingsGoals from "./pages/SavingGoals";
 import TransactionsGroceries from "./pages/TransactionsGroceries";
 import TransactionsTransportation from "./pages/TransactionsTransportation";
 import AISavingSuggestions from "./pages/AISavingSuggestions";
+import TransactionsUtilities from "./pages/TransactionsUtilities";
+import TransactionsEntertainment from "./pages/TransactionsEntertainment";
+import TransactionsRent from "./pages/TransactionsRent";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -27,6 +30,9 @@ root.render(
           <Route path="transactionsgroceries" element={<TransactionsGroceries />} />
           <Route path="transactionstransportation" element={<TransactionsTransportation />} />
           <Route path="savingsuggestions" element={<AISavingSuggestions />} />
+          <Route path="transactionsutilities" element={<TransactionsUtilities />} />
+          <Route path="transactionsentertainment" element={<TransactionsEntertainment />} />
+          <Route path="transactionsrent" element={<TransactionsRent />} />
         </Route>
       </Routes>
     </Router>
