@@ -6,19 +6,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger, DropdownMenuItem,
 } from "./components/ui/dropdown-menu";
-import { User, Send, Home, Wallet, Settings, LogOut, Goal } from "lucide-react";
+import { LogOut, Wallet, Goal, Sparkles, Settings } from "lucide-react";
 
 const TopNavigation = ({ user, onSignOut }) => {
   const navigate = useNavigate();
   const navItems = [
     { icon: Wallet, label: "BudgetPlanning", path: "/budgetplanning" },
     { icon: Goal, label: "Saving Goals", path: "/savings" },
+    { icon: Sparkles, label: "Saving Suggestions", path: "/savingsuggestions" },
     { icon: Settings, label: "Account Management", path: "/accountmanagement" },
   ];
 
@@ -55,17 +54,6 @@ const TopNavigation = ({ user, onSignOut }) => {
               <span className="text-xs text-gray-500">{user.email}</span>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={onSignOut}>
             <LogOut className="mr-2 h-4 w-4" />

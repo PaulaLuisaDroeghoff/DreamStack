@@ -98,17 +98,17 @@ const BudgetPlanner = () => {
             </div>
           ))}
         </div>
-        <div className="mt-8 flex justify-between">
-          <div>
+        <div className="mt-8 grid grid-cols-3 gap-4">
+          <div className="flex flex-col items-center">
             <h3 className="text-lg font-medium">Total March Budget</h3>
             <p className="text-2xl font-bold">£{totalBudget}</p>
           </div>
-          <div>
+          <div className="flex flex-col items-center">
             <h3 className="text-lg font-medium">Total Spending</h3>
             <p className="text-2xl font-bold">£{totalSpending}</p>
           </div>
-          <div>
-            <h3 className="text-lg font-medium">Total Budget Left</h3>
+          <div className="flex flex-col items-center">
+            <h3 className="text-lg font-medium">Total Budget Remaining</h3>
             <p className="text-2xl font-bold">£{totalBudget - totalSpending}</p>
           </div>
         </div>

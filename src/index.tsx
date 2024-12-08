@@ -9,6 +9,7 @@ import { Toaster } from "./components/ui/toaster";
 import SavingsGoals from "./pages/SavingGoals";
 import TransactionsGroceries from "./pages/TransactionsGroceries";
 import TransactionsTransportation from "./pages/TransactionsTransportation";
+import AISavingSuggestions from "./pages/AISavingSuggestions";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -25,6 +26,7 @@ root.render(
           <Route path="accountmanagement" element={<AccountManagement />} />
           <Route path="transactionsgroceries" element={<TransactionsGroceries />} />
           <Route path="transactionstransportation" element={<TransactionsTransportation />} />
+          <Route path="savingsuggestions" element={<AISavingSuggestions />} />
         </Route>
       </Routes>
     </Router>
