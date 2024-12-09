@@ -1,61 +1,256 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
-const CreateAccount = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const AccountCreation = () => {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        day: '',
+        month: '',
+        year: '',
+        street: '',
+        city: '',
+        postCode: '',
+        country: '',
+        email: '',
+        password: '',
+    });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Process form data and create account
-  };
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordRequirements, setPasswordRequirements] = useState({
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        number: false,
+        special: false,
+    });
+    const [showModal, setShowModal] = useState(false);
 
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-        <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="first-name">
-            First Name
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="first-name"
-            type="text"
-            placeholder="John"
-            required
-          />
+    const handleInputChange = (e) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [e.target.name]: e.target.value,
+        }));
+
+        // Validate password requirements
+        if (e.target.name === 'password') {
+            const password = e.target.value;
+            setPasswordRequirements({
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+            });
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Handle form submission logic here
+        console.log('Form submitted:', formData);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    return (
+        <div className="max-w-md">
+            <h1 className="text-2xl font-bold mb-4">Account Creation</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="form-group">
+                        <label htmlFor="firstName" className="block font-medium mb-2">First Name</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formData.firstName}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="lastName" className="block font-medium mb-2">Last Name</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="form-group">
+                        <label htmlFor="day" className="block font-medium mb-2">Day</label>
+                        <input
+                            type="text"
+                            id="day"
+                            name="day"
+                            value={formData.day}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="month" className="block font-medium mb-2">Month</label>
+                        <input
+                            type="text"
+                            id="month"
+                            name="month"
+                            value={formData.month}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="year" className="block font-medium mb-2">Year</label>
+                        <input
+                            type="text"
+                            id="year"
+                            name="year"
+                            value={formData.year}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                </div>
+                <div className="form-group mb-4">
+                    <label htmlFor="street" className="block font-medium mb-2">Street and House No.</label>
+                    <input
+                        type="text"
+                        id="street"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleInputChange}
+                        className="border rounded px-3 py-2 w-full"
+                        required
+                    />
+                </div>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="form-group">
+                        <label htmlFor="city" className="block font-medium mb-2">City</label>
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="postCode" className="block font-medium mb-2">Post Code</label>
+                        <input
+                            type="text"
+                            id="postCode"
+                            name="postCode"
+                            value={formData.postCode}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                    </div>
+                </div>
+                <div className="form-group mb-4">
+                    <label htmlFor="country" className="block font-medium mb-2">Country</label>
+                    <input
+                        type="text"
+                        id="country"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        className="border rounded px-3 py-2 w-full"
+                        required
+                    />
+                </div>
+                <div className="form-group mb-4">
+                    <label htmlFor="email" className="block font-medium mb-2">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="border rounded px-3 py-2 w-full"
+                        required
+                    />
+                </div>
+                <div className="form-group mb-4">
+                    <label htmlFor="password" className="block font-medium mb-2">Password</label>
+                    <div className="relative">
+                        <input
+                            type={passwordVisible ? 'text' : 'password'}
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="border rounded px-3 py-2 w-full"
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="absolute top-1/2 right-3 transform -translate-y-1/2"
+                            onClick={() => setPasswordVisible(!passwordVisible)}
+                        >
+                            {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </button>
+                    </div>
+                    <ul className="password-requirements mt-2">
+                        <li className={passwordRequirements.length ? 'text-green-500' : 'text-red-500'}>
+                            At least 8 characters
+                        </li>
+                        <li className={passwordRequirements.uppercase ? 'text-green-500' : 'text-red-500'}>
+                            At least 1 uppercase letter
+                        </li>
+                        <li className={passwordRequirements.lowercase ? 'text-green-500' : 'text-red-500'}>
+                            At least 1 lowercase letter
+                        </li>
+                        <li className={passwordRequirements.number ? 'text-green-500' : 'text-red-500'}>
+                            At least 1 number
+                        </li>
+                        <li className={passwordRequirements.special ? 'text-green-500' : 'text-red-500'}>
+                            At least 1 special character
+                        </li>
+                    </ul>
+                </div>
+                <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                    Create account
+                </button>
+            </form>
+
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-8 rounded shadow-lg max-w-md w-full">
+                        <h2 className="text-2xl font-bold mb-4">Account Created Successfully!</h2>
+                        <p className="mb-6">You can now proceed to the budget planning page.</p>
+                        <a
+                            href="budget-planning.html"
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                        >
+                            Go to Budget Planning
+                        </a>
+                        <button
+                            className="mt-4 text-gray-500 hover:text-gray-700"
+                            onClick={closeModal}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-        {/* Add more form fields for last name, date of birth, address, etc. */}
-        <div className="mb-6">
-          <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="******************"
-              required
-            />
-            <div
-              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <Eye className="text-gray-500" /> : <EyeOff className="text-gray-500" />}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Create account
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+    );
 };
 
-export default CreateAccount;
+export default AccountCreation;
