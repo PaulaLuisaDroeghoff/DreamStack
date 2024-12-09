@@ -14,19 +14,19 @@ const BudgetPlanner = () => {
   const date = 'Monday, March 10, 2025';
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categories, setCategories] = useState<BudgetCategory[]>([
-    { icon: CarFront, name: 'Transportation', amount: 63, route: '/transactionstransportation' },
-    { icon: ReceiptText, name: 'Utilities', amount: 75, route: '/transactionsutilities' },
-    { icon: House, name: 'Rent', amount: 1200, route: '/transactionsrent' },
-    { icon: ShoppingBasket, name: 'Groceries', amount: 510, route: '/transactionsgroceries' },
-    { icon: RollerCoaster, name: 'Entertainment', amount: 267, route: '/transactionsentertainment' },
-    { icon: Dumbbell, name: 'Sports', amount: 150, route: '/transactionssports' },
+    { icon: CarFront, name: 'Transportation', amount: 63, route: '/transactions?budget=transportation' },
+    { icon: ReceiptText, name: 'Utilities', amount: 75, route: '/transactions?budget=utilities' },
+    { icon: House, name: 'Rent', amount: 1200, route: '/transactions?budget=rent' },
+    { icon: ShoppingBasket, name: 'Groceries', amount: 510, route: '/transactions?budget=groceries' },
+    { icon: RollerCoaster, name: 'Entertainment', amount: 267, route: '/transactions?budget=entertainment' },
+    { icon: Dumbbell, name: 'Sports', amount: 150, route: '/transactions?budget=sports' },
   ]);
 
   const [newCategory, setNewCategory] = useState({ name: '' });
 
   const handleAddCategory = () => {
     if (newCategory.name) {
-      setCategories([...categories, { ...newCategory, icon: Star, amount: 0, route: `/transactions${newCategory.name.toLowerCase()}` }]);
+      setCategories([...categories, { ...newCategory, icon: Star, amount: 0, route: `/transactions?budget=${newCategory.name.toLowerCase()}` }]);
       setNewCategory({ name: '' });
       setIsModalOpen(false);
     }

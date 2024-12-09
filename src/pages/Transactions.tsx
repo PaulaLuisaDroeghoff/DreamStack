@@ -1,18 +1,57 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Trash2, PlusCircle, Edit3 } from 'lucide-react';
 
-const TransactionsUtilities = () => {
-  const [transactions, setTransactions] = useState([
+// Mock transactions data
+const transactionsData = {
+  entertainment: [
+    { id: 1, transaction: 'Cinema Tickets', category: 'Entertainment', amount: 50.0, date: '2025-03-09' },
+    { id: 2, transaction: 'Theater Show', category: 'Entertainment', amount: 60.0, date: '2025-03-08' },
+    { id: 3, transaction: 'Concert', category: 'Entertainment', amount: 75.0, date: '2025-03-06' },
+    { id: 4, transaction: 'Amusement Park', category: 'Entertainment', amount: 82.0, date: '2025-03-05' },
+  ],
+  groceries: [
+    { id: 1, transaction: 'Tesco', category: 'Grocery', amount: 50.5, date: '2025-03-09' },
+    { id: 2, transaction: 'Waitrose', category: 'Grocery', amount: 16.8, date: '2025-03-09' },
+    { id: 3, transaction: 'M&S Food', category: 'Grocery', amount: 20.65, date: '2025-03-08' },
+    { id: 4, transaction: 'Asda', category: 'Grocery', amount: 102.3, date: '2025-03-06' },
+  ],
+  rent: [
+    { id: 1, transaction: 'Flat Rent', category: 'Rent', amount: 1000.0, date: '2025-03-09' },
+    { id: 2, transaction: 'Parking Spot Rent', category: 'Rent', amount: 200.0, date: '2025-03-08' },
+  ],
+  sports: [
+    { id: 1, transaction: 'Gym Membership', category: 'Sports', amount: 50.0, date: '2025-03-09' },
+    { id: 2, transaction: 'Tennis Lessons', category: 'Sports', amount: 40.0, date: '2025-03-08' },
+    { id: 3, transaction: 'Swimming Pool', category: 'Sports', amount: 30.0, date: '2025-03-06' },
+    { id: 4, transaction: 'Yoga Class', category: 'Sports', amount: 30.0, date: '2025-03-05' },
+  ],
+  transportation: [
+    { id: 1, transaction: 'Bus Ticket', category: 'Transport', amount: 15.0, date: '2025-03-09' },
+    { id: 2, transaction: 'Train Ride', category: 'Transport', amount: 20.0, date: '2025-03-08' },
+    { id: 3, transaction: 'Taxi', category: 'Transport', amount: 18.0, date: '2025-03-06' },
+    { id: 4, transaction: 'Bike Rental', category: 'Transport', amount: 10.0, date: '2025-03-05' },
+  ],
+  utilities: [
     { id: 1, transaction: 'Water Bill', category: 'Utilities', amount: 20.0, date: '2025-03-09' },
     { id: 2, transaction: 'Gas', category: 'Utilities', amount: 15.0, date: '2025-03-08' },
     { id: 3, transaction: 'Wifi', category: 'Utilities', amount: 20.0, date: '2025-03-06' },
     { id: 4, transaction: 'Electricity', category: 'Utilities', amount: 20.0, date: '2025-03-05' },
-  ]);
+  ]
+  // Add other categories as needed
+};
 
+const Transactions = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const budgetCategory = queryParams.get('budget') || 'entertainment';
+
+  const [transactions, setTransactions] = useState(transactionsData[budgetCategory] || []);
   const [editId, setEditId] = useState<number | null>(null);
   const [editTransaction, setEditTransaction] = useState({
     transaction: '',
-    category: 'Utilities', // Default value for the category
+    category: budgetCategory.charAt(0).toUpperCase() + budgetCategory.slice(1),
     amount: '',
     date: '',
   });
@@ -45,10 +84,10 @@ const TransactionsUtilities = () => {
   };
 
   const handleAddTransaction = () => {
-    setEditId(-1); // Special flag to indicate a new transaction is being added
+    setEditId(-1);
     setEditTransaction({
       transaction: '',
-      category: 'Utilities', // Default value for the new transaction
+      category: budgetCategory.charAt(0).toUpperCase() + budgetCategory.slice(1),
       amount: '',
       date: '',
     });
@@ -67,19 +106,21 @@ const TransactionsUtilities = () => {
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       )
     );
-    setEditId(null); // Exit edit mode
+    setEditId(null);
   };
 
   const totalSpending = transactions.reduce((total, t) => total + t.amount, 0);
 
+  const handleNavigateToBudgetPlanning = () => {
+    navigate('/budgetplanning');
+  };
+
   return (
     <div className="container mx-auto p-6">
-      {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Utilities Spending</h1>
+        <h1 className="text-2xl font-bold">{budgetCategory.charAt(0).toUpperCase() + budgetCategory.slice(1)} Spending</h1>
       </div>
 
-      {/* Transactions Table */}
       <table className="w-full text-left border-collapse border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
@@ -126,7 +167,7 @@ const TransactionsUtilities = () => {
                     name="amount"
                     value={`£${editTransaction.amount}`}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/£/, ''); // Remove any existing £
+                      const value = e.target.value.replace(/£/, '');
                       if (!isNaN(Number(value)) || value === '') {
                         setEditTransaction((prev) => ({ ...prev, amount: value }));
                       }
@@ -144,7 +185,7 @@ const TransactionsUtilities = () => {
                     name="date"
                     value={editTransaction.date}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+                      const value = e.target.value.replace(/[^\d]/g, '');
                       let formattedValue = value;
                       if (value.length > 4)
                         formattedValue = `${value.slice(0, 4)}/${value.slice(4, 6)}/${value.slice(6, 8)}`;
@@ -237,7 +278,6 @@ const TransactionsUtilities = () => {
         </tbody>
       </table>
 
-      {/* Add Transaction Button */}
       <div className="mt-4 flex justify-center">
         <PlusCircle
           className="text-gray-400 cursor-pointer"
@@ -246,12 +286,20 @@ const TransactionsUtilities = () => {
         />
       </div>
 
-      {/* Total Spending */}
       <div className="mt-4 text-right text-xl font-bold">
         # Total Spending: £{totalSpending.toFixed(2)}
+      </div>
+
+      <div className="mt-4 flex justify-start">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={handleNavigateToBudgetPlanning}
+        >
+          Go to Budget Planning
+        </button>
       </div>
     </div>
   );
 };
 
-export default TransactionsUtilities;
+export default Transactions;

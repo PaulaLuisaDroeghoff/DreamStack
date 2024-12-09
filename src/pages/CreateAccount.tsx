@@ -235,7 +235,7 @@ const CreateAccount = () => {
                         <h2 className="text-2xl font-bold mb-4">Account Created Successfully!</h2>
                         <p className="mb-6">You can now proceed to the budget planning page.</p>
                         <a
-                            href="budget-planning.html"
+                            href="budgetplanning"
                             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
                         >
                             Go to Budget Planning
