@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
-const AccountCreation = () => {
+const CreateAccount = () => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -253,4 +253,4 @@ const AccountCreation = () => {
     );
 };
 
-export default AccountCreation;
+export default CreateAccount;
