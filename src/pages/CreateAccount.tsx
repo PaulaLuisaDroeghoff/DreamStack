@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
 const AccountCreation = () => {
@@ -26,7 +26,7 @@ const AccountCreation = () => {
     });
     const [showModal, setShowModal] = useState(false);
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prevData) => ({
             ...prevData,
             [e.target.name]: e.target.value,
@@ -45,7 +45,7 @@ const AccountCreation = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // Handle form submission logic here
         console.log('Form submitted:', formData);
@@ -57,7 +57,7 @@ const AccountCreation = () => {
     };
 
     return (
-        <div className="max-w-md">
+        <div className="max-w-md mx-auto mt-20">
             <h1 className="text-2xl font-bold mb-4">Account Creation</h1>
             <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4 mb-4">
@@ -224,7 +224,7 @@ const AccountCreation = () => {
                         </li>
                     </ul>
                 </div>
-                <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                <button type="submit" className="bg-[#626be9] hover:bg-[#4e55c7] text-white px-4 py-2 rounded">
                     Create account
                 </button>
             </form>
