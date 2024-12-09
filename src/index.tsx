@@ -9,6 +9,7 @@ import { Toaster } from "./components/ui/toaster";
 import SavingsGoals from "./pages/SavingGoals";
 import AISavingSuggestions from "./pages/AISavingSuggestions";
 import Transactions from "./pages/Transactions";
+import LogIn from "./pages/LogIn";
 
 import CreateAccount from "./pages/CreateAccount";
 
@@ -28,7 +29,7 @@ root.render(
           <Route path="accountmanagement" element={<AccountManagement />} />
           <Route path="savingsuggestions" element={<AISavingSuggestions />} />
           <Route path="transactions" element={<Transactions />} />
-         
+          <Route path="login" element={<LogIn />} />
         </Route>
       </Routes>
     </Router>

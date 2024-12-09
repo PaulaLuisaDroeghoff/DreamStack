@@ -1,6 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "./components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
 import {
@@ -8,17 +7,18 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger, DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "./components/ui/dropdown-menu";
 import { LogOut, Wallet, Goal, Sparkles, Settings } from "lucide-react";
 
+// TopNavigation Component
 const TopNavigation = ({ user, onSignOut }) => {
   const navigate = useNavigate();
   const navItems = [
     { icon: Wallet, label: "BudgetPlanning", path: "/budgetplanning" },
     { icon: Goal, label: "Saving Goals", path: "/savings" },
     { icon: Sparkles, label: "Saving Suggestions", path: "/savingsuggestions" },
-    { icon: Settings, label: "Account Management", path: "/accountmanagement" },
   ];
 
   return (
@@ -55,6 +55,10 @@ const TopNavigation = ({ user, onSignOut }) => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={() => navigate("/accountmanagement")}>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Account Management</span>
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={onSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
@@ -65,6 +69,7 @@ const TopNavigation = ({ user, onSignOut }) => {
   );
 };
 
+// Footer Component
 const Footer = () => {
   return (
     <footer className="bg-white py-4 text-center text-gray-500">
@@ -75,7 +80,10 @@ const Footer = () => {
   );
 };
 
+// Main App Component
 const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation(); // Get the current route
   const user = {
     name: "John Doe",
     email: "john.doe@example.com",
@@ -84,11 +92,16 @@ const App = () => {
 
   const handleSignOut = () => {
     console.log("Signing out");
+    navigate("/login");
   };
 
+  // Conditionally render TopNavigation based on the current route
   return (
     <div className="flex flex-col h-screen">
-      <TopNavigation user={user} onSignOut={handleSignOut} />
+      {/* Only render TopNavigation if the current path is not '/login' or '/createaccount' */}
+      {location.pathname !== "/login" && location.pathname !== "/createaccount" && (
+        <TopNavigation user={user} onSignOut={handleSignOut} />
+      )}
       <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
