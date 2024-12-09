@@ -224,7 +224,7 @@ const CreateAccount = () => {
                         </li>
                     </ul>
                 </div>
-                <button type="submit" className="bg-[#626be9] hover:bg-[#4e55c7] text-white px-4 py-2 rounded">
+                <button type="submit" className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded">
                     Create account
                 </button>
             </form>

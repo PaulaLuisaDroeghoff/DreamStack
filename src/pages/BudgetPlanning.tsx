@@ -40,22 +40,22 @@ const BudgetPlanner = () => {
       <header className="bg-white border-b p-4 flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold text-gray-800 mr-8">Budget Planner</h1>
-          <button
+            <button
             onClick={() => setIsModalOpen(true)}
             className="p-2 rounded-full hover:bg-gray-100"
-          >
-            <Plus className="text-[#626be8]" />
-          </button>
-          <span className="flex items-center text-gray-500 ml-4">
-            <Calendar className="mr-2" />
+            >
+            <Plus className="text-black" />
+            </button>
+            <span className="flex items-center text-gray-500 ml-4">
+            <Calendar className="mr-2 text-black" />
             {date}
-          </span>
-        </div>
-      </header>
+            </span>
+            </div>
+            </header>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg">
+            {isModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">Add New Category</h2>
             <input
               type="text"
@@ -66,35 +66,35 @@ const BudgetPlanner = () => {
             />
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 bg-gray-200 rounded"
-                onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 bg-gray-200 rounded"
+              onClick={() => setIsModalOpen(false)}
               >
-                Cancel
+              Cancel
               </button>
               <button
-                className="px-4 py-2 bg-[#626be8] text-white rounded"
-                onClick={handleAddCategory}
+              className="px-4 py-2 bg-black text-white rounded"
+              onClick={handleAddCategory}
               >
-                Add
+              Add
               </button>
             </div>
-          </div>
-        </div>
-      )}
+            </div>
+            </div>
+            )}
 
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="grid grid-cols-3 gap-4">
-          {categories.map((category, index) => (
+            <main className="flex-1 overflow-y-auto p-8">
+            <div className="grid grid-cols-3 gap-4">
+            {categories.map((category, index) => (
             <div
               key={index}
               className="bg-white shadow-md rounded-lg p-4 h-32 cursor-pointer"
               onClick={() => navigate(category.route)}
             >
               <div className="flex items-center mb-2">
-                <category.icon className="text-[#626be8] mr-2" />
-                <h3 className="text-lg font-medium">{category.name}</h3>
+              <category.icon className="text-black mr-2" />
+              <h3 className="text-lg font-medium text-black">{category.name}</h3>
               </div>
-              <p className="text-2xl font-bold text-[#626be8]">£{category.amount}</p>
+              <p className="text-2xl font-bold text-black">£{category.amount}</p>
             </div>
           ))}
         </div>

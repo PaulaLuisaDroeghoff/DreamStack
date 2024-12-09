@@ -44,7 +44,7 @@ const SavingGoals = () => {
             onClick={() => navigate('/add-goal')} // Direct to goal addition page
             className="p-2 rounded-full hover:bg-gray-100"
           >
-            <Plus className="text-[#626be8]" />
+            <Plus className="text-[#000000]" />
           </button>
         </div>
       </header>
@@ -75,8 +75,8 @@ const SavingGoals = () => {
                   text={`${goal.progress}%`}
                   strokeWidth={8}
                   styles={buildStyles({
-                    pathColor: '#626be8',
-                    textColor: '#626be8',
+                    pathColor: '#000000',
+                    textColor: '#000000',
                   })}
                 />
               </div>
@@ -84,8 +84,6 @@ const SavingGoals = () => {
           ))}
         </div>
       </main>
-
-      
     </div>
   );
 };
