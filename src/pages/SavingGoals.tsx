@@ -41,7 +41,7 @@ const SavingGoals = () => {
         <div className="flex items-center">
           <h1 className="text-2xl font-bold text-gray-800 mr-4">Saving Goals</h1>
           <button
-            onClick={() => navigate('/addgoal')} // Direct to goal addition page
+            onClick={() => navigate('/add-goal')} // Direct to goal addition page
             className="p-2 rounded-full hover:bg-gray-100"
           >
             <Plus className="text-[#000000]" />

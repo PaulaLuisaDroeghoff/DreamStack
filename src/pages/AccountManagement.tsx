@@ -44,8 +44,13 @@ const AccountManagement = () => {
   };
 
   const handleEditField = (field: string) => {
-    setEditingField(field);
+    if (editingField === field) {
+      handleSave(); // Save the data when toggling off
+    } else {
+      setEditingField(field);
+    }
   };
+  
 
   const handleSave = () => {
     setEditingField(null);

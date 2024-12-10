@@ -5,7 +5,8 @@ import {
   DollarSign, 
   ShoppingCart, 
   Truck, 
-  Zap
+  Zap, 
+  Dumbbell
 } from 'lucide-react';
 
 type Suggestion = {
@@ -61,7 +62,7 @@ const SavingsSuggestions: React.FC = () => {
     },
     {
       id: 6,
-      icon: <DollarSign size={24} />,
+      icon: <Dumbbell size={24} />,
       category: 'Sports',
       title: 'Gym Membership Consolidation',
       description: "Cancel Virgin Active (£75/month) and keep Pure Gym (£40/month). Save £75/month.",

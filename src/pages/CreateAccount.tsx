@@ -244,7 +244,7 @@ const CreateAccount = () => {
                             <p className="mb-6">You can now proceed to the budget planning page.</p>
                             <a
                                 href="budgetplanning"
-                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                                className="bg-black hover:bg-blue-600 text-white px-4 py-2 rounded"
                             >
                                 Go to Budget Planning
                             </a>

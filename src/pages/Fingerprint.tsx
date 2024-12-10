@@ -66,7 +66,7 @@ const WebAuthnFingerprintDemo = () => {
 
         toast({
         title: "Login Successful",
-        description: "Welcome back to your banking dashboard",
+        description: "Welcome back to your DreamStack",
         });
         navigate('/budgetplanning');
     } catch (error) {
