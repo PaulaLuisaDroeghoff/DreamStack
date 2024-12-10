@@ -32,7 +32,7 @@ const SavingsSuggestions: React.FC = () => {
       icon: <Wifi size={24} />,
       category: 'Utilities',
       title: 'Switch to a Cheaper Internet Plan',
-      description: "Switch to Virgin's 20GB plan. Save £20/month and still have enough bandwidth.",
+      description: "Switch to Vodafone's 20GB plan. Save £20/month and still have enough bandwidth.",
       potentialSavings: 20
     },
     {

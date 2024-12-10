@@ -18,19 +18,19 @@ const SavingGoals = () => {
       image: "/Umbrella.png", 
       name: 'Beach Vacation',
       progress: 70,
-      route: '/beach-vacation',
+      route: '/goaldetail?goal=beachvacation',
     },
     {
       image: 'Car.jpeg',
       name: 'New Car',
       progress: 25,
-      route: '/new-car',
+      route: '/goaldetail?goal=newcar',
     },
     {
       image: '/Machine.jpg',
       name: 'Coffee Machine',
       progress: 70,
-      route: '/coffee-machine',
+      route: '/goaldetail?goal=coffeemachine',
     },
   ]);
 
@@ -41,7 +41,7 @@ const SavingGoals = () => {
         <div className="flex items-center">
           <h1 className="text-2xl font-bold text-gray-800 mr-4">Saving Goals</h1>
           <button
-            onClick={() => navigate('/add-goal')} // Direct to goal addition page
+            onClick={() => navigate('/addgoal')} // Direct to goal addition page
             className="p-2 rounded-full hover:bg-gray-100"
           >
             <Plus className="text-[#000000]" />
