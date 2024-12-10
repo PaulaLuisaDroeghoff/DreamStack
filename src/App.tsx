@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "./components/ui/dropdown-menu";
-import { LogOut, Wallet, Goal, Sparkles, Settings } from "lucide-react";
+import { LogOut, Wallet, Goal, Sparkles, Settings, Landmark } from "lucide-react";
 
 // TopNavigation Component
 const TopNavigation = ({ user, onSignOut }) => {
@@ -58,6 +58,10 @@ const TopNavigation = ({ user, onSignOut }) => {
           <DropdownMenuItem onSelect={() => navigate("/accountmanagement")}>
             <Settings className="mr-2 h-4 w-4" />
             <span>Account Management</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => navigate("/bankconnections")}>
+            <Landmark className="mr-2 h-4 w-4" />
+            <span>Bank Connections</span>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
