@@ -15,7 +15,6 @@ import BankConnections from "./pages/BankConnections";
 import CreateAccount from "./pages/CreateAccount";
 import GoalDetail from "./pages/GoalDetail";
 import AddGoal from "./pages/AddGoal";
-import LogIn2 from "./pages/LogIn2";
 import Fingerprint from "./pages/Fingerprint";
 
 const root = ReactDOM.createRoot(
@@ -39,7 +38,6 @@ root.render(
           <Route path="bankconnections" element={<BankConnections />} />
           <Route path="goaldetail" element={<GoalDetail />} />
           <Route path="addgoal" element={<AddGoal />} />
-          <Route path="login2" element={<LogIn2 />} />
           <Route path="fingerprint" element={<Fingerprint />} />
         </Route>
       </Routes>

@@ -25,6 +25,10 @@ const LogIn: React.FC = () => {
         setShowModal(false); // Hide the modal when "Go Back to Login" is clicked
     };
 
+    const handleCloseAuthModal = () => {
+        setShowAuthModal(false);
+    }
+
     const handlePasswordResetSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         // Handle password reset logic here (e.g., send reset email)
@@ -123,8 +127,8 @@ const LogIn: React.FC = () => {
                 </div>
             </div>
 
-                        {/* Authentication Modal */}
-                        {showAuthModal && (
+                {/* Authentication Modal */}
+                {showAuthModal && (
                 <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
                     <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
                         <h2 className="text-2xl font-bold text-black mb-4">
@@ -162,10 +166,11 @@ const LogIn: React.FC = () => {
                             </button>
                         </div>
                         <button
-                            onClick={handleCloseModal}
-                            className="mt-4 text-sm text-black"
+                            onClick={handleCloseAuthModal}
+                            className="mt-4 text-sm text-black hover:text-black"
                         >
-                            Go Back
+                            Go Back to Login
+
                         </button>
                     </div>
                 </div>
@@ -219,12 +224,11 @@ const LogIn: React.FC = () => {
                                 </form>
                                 <button
                                     onClick={handleCloseModal}
-                                    className="mt-4 text-sm text-black hover:text-balck"
+                                    className="mt-4 text-sm text-black hover:text-black"
                                 >
                                     Go Back to Login
 
                                 </button>
-                                <WebAuthnFingerprintDemo/>
                             </div>
                         )}
                     </div>
