@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import WebAuthnFingerprintDemo from "./Fingerprint";
+import { toast } from "react-hot-toast";
 
 const LogIn: React.FC = () => {
     const navigate = useNavigate();
     const imageSrc = "Hands.png"; // Replace with the correct image path
-
+    const [showAuthModal, setShowAuthModal] = useState(false); // Modal visibility state
     const [showModal, setShowModal] = useState(false); // Modal visibility state
     const [emailSent, setEmailSent] = useState(false); // Track if email has been sent
+    const [verificationCode, setVerificationCode] = useState(""); // Verification code state
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        // Add your login logic here
-
-        // On successful login, redirect to the budget planning page
-        navigate("/budgetplanning");
+        // Show authentication modal for verification
+        setShowAuthModal(true);
     };
 
     const handleForgotPasswordClick = () => {
@@ -29,6 +30,10 @@ const LogIn: React.FC = () => {
         // Handle password reset logic here (e.g., send reset email)
         // After submission, show the success message
         setEmailSent(true); // Show success message
+    };
+
+    const handleCodeVerification = () => {
+        navigate("/budgetplanning"); // Redirect after successful login
     };
 
     return (
@@ -113,9 +118,58 @@ const LogIn: React.FC = () => {
                         <a href="/createaccount" className="text-black font-bold">
                             Sign up here
                         </a>
+
                     </div>
                 </div>
             </div>
+
+                        {/* Authentication Modal */}
+                        {showAuthModal && (
+                <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+                        <h2 className="text-2xl font-bold text-black mb-4">
+                            Verify Your Identity
+                        </h2>
+                        <div className="space-y-4">
+                            <WebAuthnFingerprintDemo/>
+                            <div>
+                                <label
+                                    htmlFor="verificationCode"
+                                    className="block text-lg font-semibold  text-center text-black"
+                                >
+                                    OR
+                                </label>
+                                <label
+                                    htmlFor="verificationCode"
+                                    className="block text-lg  text-center text-black"
+                                >
+                                    Enter Verification Code
+                                </label>
+                                <input
+                                    type="text"
+                                    id="verificationCode"
+                                    value={verificationCode}
+                                    onChange={(e) => setVerificationCode(e.target.value)}
+                                    className="w-full p-3 mt-2 border border-grey rounded-md"
+                                    placeholder="Enter code sent to your email"
+                                />
+                            </div>
+                            <button
+                                onClick={handleCodeVerification}
+                                className="w-full py-3 mt-2 bg-black text-white rounded-md"
+                            >
+                                Verify Code
+                            </button>
+                        </div>
+                        <button
+                            onClick={handleCloseModal}
+                            className="mt-4 text-sm text-black"
+                        >
+                            Go Back
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Modal for Forgot Password */}
             {showModal && (
@@ -168,7 +222,9 @@ const LogIn: React.FC = () => {
                                     className="mt-4 text-sm text-black hover:text-balck"
                                 >
                                     Go Back to Login
+
                                 </button>
+                                <WebAuthnFingerprintDemo/>
                             </div>
                         )}
                     </div>
