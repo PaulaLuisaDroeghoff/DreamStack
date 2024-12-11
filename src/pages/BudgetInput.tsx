@@ -57,13 +57,14 @@ const BudgetAllocation: React.FC = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-start bg-white text-black p-6">
             {/* Page Header */}
-            <div className="w-full flex justify-between items-center mb-8 p-6">
+            <div className="w-full flex justify-between items-center mb-2 p-6">
                 <h1 className="text-2xl font-bold">Budget Allocation</h1>
                 <div className="flex items-center">
                     <Calendar className="text-gray-600 mr-2" size={24} />
                     <span className="text-xl">{currentMonth}</span>
                 </div>
             </div>
+            <p className="text-lg mb-4">Insert the total budget and then decide how much you want to add to your spending budget and how much you want to allocate as savings towards each saving goal.</p>
 
             {/* Budget Allocation Form */}
             <div className="w-full max-w-7xl px-6">
