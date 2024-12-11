@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Goal, Plus } from 'lucide-react';
+import { Plus, Trash } from 'lucide-react'; // Importing the Trash icon
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -15,7 +15,7 @@ const SavingGoals = () => {
   const navigate = useNavigate();
   const [goals, setGoals] = useState<SavingGoal[]>([
     {
-      image: "/Umbrella.png", 
+      image: "/Umbrella.png",
       name: 'Beach Vacation',
       progress: 70,
       route: '/goaldetail?goal=beachvacation',
@@ -33,6 +33,28 @@ const SavingGoals = () => {
       route: '/goaldetail?goal=coffeemachine',
     },
   ]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [goalToDelete, setGoalToDelete] = useState<number | null>(null);
+
+  const handleDelete = (index: number) => {
+    setGoalToDelete(index); // Set the index of the goal to be deleted
+    setShowModal(true); // Show the confirmation modal
+  };
+
+  const confirmDelete = () => {
+    if (goalToDelete !== null) {
+      // Remove the selected goal
+      setGoals((prevGoals) => prevGoals.filter((_, index) => index !== goalToDelete));
+    }
+    setShowModal(false); // Close the modal
+    setGoalToDelete(null); // Reset the index
+  };
+
+  const cancelDelete = () => {
+    setShowModal(false); // Close the modal without deleting
+    setGoalToDelete(null); // Reset the index
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gray-50">
@@ -55,8 +77,7 @@ const SavingGoals = () => {
           {goals.map((goal, index) => (
             <div
               key={index}
-              className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center justify-center space-y-4 cursor-pointer hover:shadow-xl"
-              onClick={() => navigate(goal.route)}
+              className="bg-white shadow-md rounded-lg p-6 relative flex flex-col items-center justify-center space-y-4 cursor-pointer hover:shadow-xl"
             >
               {/* Goal Name */}
               <h3 className="text-lg font-medium text-center">{goal.name}</h3>
@@ -67,7 +88,7 @@ const SavingGoals = () => {
                 alt={goal.name}
                 className="w-48 h-32 object-contain"
               />
-              
+
               {/* Circular Progress Bar (Pie Chart) */}
               <div className="w-32 h-32">
                 <CircularProgressbar
@@ -80,10 +101,44 @@ const SavingGoals = () => {
                   })}
                 />
               </div>
+
+              {/* Trash Icon */}
+              <button
+                onClick={() => handleDelete(index)}
+                className="absolute bottom-4 right-4 p-2 rounded-full bg-white hover:bg-white"
+              >
+                <Trash className="text-black" />
+              </button>
             </div>
           ))}
         </div>
       </main>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-2xl font-bold text-black mb-4">Are you sure?</h2>
+            <p className="text-gray-700 mb-4">
+              Do you really want to delete this saving goal? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={cancelDelete}
+                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-black text-white rounded-md hover:bg-black"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
