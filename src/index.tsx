@@ -17,6 +17,7 @@ import GoalDetail from "./pages/GoalDetail";
 import AddGoal from "./pages/AddGoal";
 import Fingerprint from "./pages/Fingerprint";
 import BudgetInput from "./pages/BudgetInput";
+import ManageMembership from "./pages/ManageMembership";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -41,6 +42,7 @@ root.render(
           <Route path="addgoal" element={<AddGoal />} />
           <Route path="fingerprint" element={<Fingerprint />} />
           <Route path="budgetinput" element={<BudgetInput />} />
+          <Route path="managemembership" element={<ManageMembership />} />
         </Route>
       </Routes>
     </Router>

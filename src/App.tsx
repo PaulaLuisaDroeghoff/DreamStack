@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "./components/ui/dropdown-menu";
-import { LogOut, Wallet, Goal, Sparkles, Settings, Landmark } from "lucide-react";
+import { LogOut, Wallet, Goal, Sparkles, Settings, Landmark, Star } from "lucide-react";
 
 // TopNavigation Component
 const TopNavigation = ({ user, onSignOut }) => {
@@ -43,8 +43,9 @@ const TopNavigation = ({ user, onSignOut }) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="cursor-pointer">
-            <AvatarImage src={user.avatarUrl} alt={user.name} />
+            <AvatarImage src='profile.jpg' alt={user.name} />
             <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            className="h-15 w-15 rounded-full object-cover"
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
@@ -62,6 +63,10 @@ const TopNavigation = ({ user, onSignOut }) => {
           <DropdownMenuItem onSelect={() => navigate("/bankconnections")}>
             <Landmark className="mr-2 h-4 w-4" />
             <span>Bank Connections</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => navigate("/managemembership")}>
+            <Star className="mr-2 h-4 w-4" />
+            <span>Manage Membership</span>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
@@ -89,8 +94,8 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get the current route
   const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "DreamStack User",
+    email: "user@dreamstack.com",
     avatarUrl: "/path/to/avatar.jpg",
   };
 

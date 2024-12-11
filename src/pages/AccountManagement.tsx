@@ -3,14 +3,14 @@ import { Bell, BellOff, Edit } from 'lucide-react';
 
 const AccountManagement = () => {
   const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
+    firstName: 'David',
+    lastName: 'Smith',
     dateOfBirth: '1990-01-01',
     street: '123 Main St',
     postCode: '12345',
-    city: 'Springfield',
-    country: 'USA',
-    email: 'john.doe@example.com',
+    city: 'London',
+    country: 'United Kingdom',
+    email: 'user@dreamstack.com',
     notificationsEnabled: true,
   });
 
