@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, BellOff, Edit } from 'lucide-react';
+import { Bell, BellOff, Edit, Trash } from 'lucide-react';
 
 const AccountManagement = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +21,9 @@ const AccountManagement = () => {
     newPassword: '',
   });
   const [passwordMessage, setPasswordMessage] = useState('');
+
+  // For delete confirmation
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
@@ -71,6 +74,14 @@ const AccountManagement = () => {
       setPasswordData({ oldPassword: '', newPassword: '' });
     }
   };
+
+    // Handle account deletion
+    const handleDeleteAccount = () => {
+      // Here you would add logic to delete the account from your system (e.g., API call)
+      console.log("Account deleted");
+      // Redirect to login page after deletion
+      window.location.href = '/login'; // Redirect to login page
+    };
 
   return (
     <div className="min-h-screen bg-white p-8">
@@ -298,6 +309,38 @@ const AccountManagement = () => {
           </div>
         </div>
       </div>
+      {/* Delete Account Button */}
+      <button
+        onClick={() => setIsDeleteModalOpen(true)}
+        className="absolute bottom-4 left-4 text-black flex items-center"
+      >
+        <Trash size={20} />
+        <span className="ml-2">Delete Account</span>
+      </button>
+
+      {/* Delete Account Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Are you sure you want to delete your account?</h2>
+            <p className="mb-4 text-gray-700">This action cannot be undone. And you might never achieve your svaing goals...</p>
+            <div className="flex justify-between">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                className="bg-black text-white px-4 py-2 rounded"
+              >
+                Yes, Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Password Change Modal */}
       {isPasswordModalOpen && (
