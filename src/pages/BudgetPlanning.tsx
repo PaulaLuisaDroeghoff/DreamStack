@@ -1,40 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useBudgetStore from '../store'; // Correct import for Zustand store
 import { ShoppingBasket, House, ReceiptText, CarFront, RollerCoaster, Dumbbell, Calendar, Plus, Star } from 'lucide-react';
-
-interface BudgetCategory {
-  icon: React.ElementType;
-  name: string;
-  amount: number;
-  route: string;
-}
 
 const BudgetPlanner = () => {
   const navigate = useNavigate();
-  // Get the current month
-  const currentMonth = new Date().toLocaleString("default", { month: "long", year: "numeric" });
+  const currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [categories, setCategories] = useState<BudgetCategory[]>([
-    { icon: CarFront, name: 'Transportation', amount: 63, route: '/transactions?budget=transportation' },
-    { icon: ReceiptText, name: 'Utilities', amount: 75, route: '/transactions?budget=utilities' },
-    { icon: House, name: 'Rent', amount: 1200, route: '/transactions?budget=rent' },
-    { icon: ShoppingBasket, name: 'Groceries', amount: 510, route: '/transactions?budget=groceries' },
-    { icon: RollerCoaster, name: 'Entertainment', amount: 267, route: '/transactions?budget=entertainment' },
-    { icon: Dumbbell, name: 'Sports', amount: 150, route: '/transactions?budget=sports' },
-  ]);
 
-  const [newCategory, setNewCategory] = useState({ name: '' });
+  // Use the Zustand store
+  const { categories, addCategory, totalBudget } = useBudgetStore();
+
+  // Calculate total spending dynamically
+  const totalSpending = categories.reduce((sum, category) => sum + category.amount, 0);
+
+  const [newCategory, setNewCategory] = useState({ title: '' });
 
   const handleAddCategory = () => {
-    if (newCategory.name) {
-      setCategories([...categories, { ...newCategory, icon: Star, amount: 0, route: `/transactions?budget=${newCategory.name.toLowerCase()}` }]);
-      setNewCategory({ name: '' });
+    if (newCategory.title) {
+      addCategory({
+        icon: 'Star', // Default icon as string (adjust if dynamic icon components are needed)
+        title: newCategory.title,
+        amount: 0,
+        route: `/transactions?budget=${newCategory.title.toLowerCase()}`,
+      });
+      setNewCategory({ title: '' });
       setIsModalOpen(false);
     }
   };
-
-  const totalBudget = 2900;
-  const totalSpending = categories.reduce((sum, cat) => sum + cat.amount, 0);
 
   return (
     <div className="flex flex-col h-screen">
@@ -68,8 +61,8 @@ const BudgetPlanner = () => {
               type="text"
               placeholder="Category Name"
               className="w-full mb-4 p-2 border rounded"
-              value={newCategory.name}
-              onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+              value={newCategory.title}
+              onChange={(e) => setNewCategory({ title: e.target.value })}
             />
             <div className="flex justify-end gap-2">
               <button
@@ -98,8 +91,9 @@ const BudgetPlanner = () => {
               onClick={() => navigate(category.route)}
             >
               <div className="flex items-center mb-2">
-                <category.icon className="text-black mr-2" />
-                <h3 className="text-lg font-medium text-black">{category.name}</h3>
+                {/* Replace with dynamic icon logic if needed */}
+                <House className="text-black mr-2" />
+                <h3 className="text-lg font-medium text-black">{category.title}</h3>
               </div>
               <p className="text-2xl font-bold text-black">£{category.amount}</p>
             </div>

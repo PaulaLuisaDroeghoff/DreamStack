@@ -1,55 +1,14 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import useBudgetStore from '../store';
 
 interface SavingGoal {
-  id: number;
-  name: string;
   title: string;
   totalAmount: number;
   savedAmount: number;
   milestones: string[];
   image: string;
 }
-
-const savingGoals: SavingGoal[] = [
-  {
-    id: 1,
-    title: 'Beach Vacation',
-    name: 'beachvacation',
-    image: 'Umbrella.png', // Replace with actual image URL
-    totalAmount: 2000,
-    savedAmount: 1400,
-    milestones: [
-      'Flights',
-      'Hotel',
-      'Activities',
-    ],
-  },
-  {
-    id: 2,
-    title: 'New Car',
-    name: 'newcar',
-    image: 'Car.jpeg', 
-    totalAmount: 7000,
-    savedAmount: 1400,
-    milestones: [
-      'Buy the car',
-      'Get insurance',
-    ],
-  },
-  {
-    id: 3,
-    title: 'Coffee Machine',
-    name: 'coffeemachine',
-    image: 'Machine.jpg', 
-    totalAmount: 1000,
-    savedAmount: 700,
-    milestones: [
-      'Buy the machine',
-      'Buy a coffee grinder',
-    ],
-  }
-];
 
 const GoalDetailHeader: React.FC<{ title: string }> = ({ title }) => (
   <header className="bg-white border-b p-6 flex justify-center">
@@ -105,7 +64,8 @@ const GoalDetail: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const goalCategory = queryParams.get('goal') || '';
 
-  const goal = savingGoals.find((g) => g.name === goalCategory);
+  const savingGoals = useBudgetStore((state) => state.savingGoals);
+  const goal = savingGoals.find((g) => g.route.includes(goalCategory));
 
   if (!goal) {
     return <div>Goal not found!</div>;

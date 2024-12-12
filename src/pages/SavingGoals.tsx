@@ -1,38 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash } from 'lucide-react'; // Importing the Trash icon
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
-interface SavingGoal {
-  image: string;
-  name: string;
-  progress: number;
-  route: string;
-}
+import useBudgetStore from '../store';
 
 const SavingGoals = () => {
   const navigate = useNavigate();
-  const [goals, setGoals] = useState<SavingGoal[]>([
-    {
-      image: "/Umbrella.png",
-      name: 'Beach Vacation',
-      progress: 70,
-      route: '/goaldetail?goal=beachvacation',
-    },
-    {
-      image: 'Car.jpeg',
-      name: 'New Car',
-      progress: 25,
-      route: '/goaldetail?goal=newcar',
-    },
-    {
-      image: '/Machine.jpg',
-      name: 'Coffee Machine',
-      progress: 70,
-      route: '/goaldetail?goal=coffeemachine',
-    },
-  ]);
+  const { savingGoals, addSavingGoal, deleteSavingGoal } = useBudgetStore();
 
   const [showModal, setShowModal] = useState(false);
   const [goalToDelete, setGoalToDelete] = useState<number | null>(null);
@@ -45,7 +20,7 @@ const SavingGoals = () => {
   const confirmDelete = () => {
     if (goalToDelete !== null) {
       // Remove the selected goal
-      setGoals((prevGoals) => prevGoals.filter((_, index) => index !== goalToDelete));
+      deleteSavingGoal(goalToDelete);
     }
     setShowModal(false); // Close the modal
     setGoalToDelete(null); // Reset the index
@@ -54,6 +29,10 @@ const SavingGoals = () => {
   const cancelDelete = () => {
     setShowModal(false); // Close the modal without deleting
     setGoalToDelete(null); // Reset the index
+  };
+
+  const handleGoalClick = (route: string) => {
+    navigate(route);  // Navigate to the path defined in the goal's route
   };
 
   return (
@@ -74,18 +53,19 @@ const SavingGoals = () => {
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {goals.map((goal, index) => (
+          {savingGoals.map((goal, index) => (
             <div
               key={index}
               className="bg-white shadow-md rounded-lg p-6 relative flex flex-col items-center justify-center space-y-4 cursor-pointer hover:shadow-xl"
+              onClick={() => handleGoalClick(goal.route)} // Add click handler for navigation
             >
               {/* Goal Name */}
-              <h3 className="text-lg font-medium text-center">{goal.name}</h3>
+              <h3 className="text-lg font-medium text-center">{goal.title}</h3>
 
               {/* Goal Image */}
               <img
                 src={goal.image}
-                alt={goal.name}
+                alt={goal.title}
                 className="w-48 h-32 object-contain"
               />
 
@@ -104,7 +84,10 @@ const SavingGoals = () => {
 
               {/* Trash Icon */}
               <button
-                onClick={() => handleDelete(index)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click event from triggering navigation
+                  handleDelete(index);
+                }}
                 className="absolute bottom-4 right-4 p-2 rounded-full bg-white hover:bg-white"
               >
                 <Trash className="text-black" />

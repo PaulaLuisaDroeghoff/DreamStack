@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useBudgetStore from '../store';
 
 const CreateSavingGoal: React.FC = () => {
   const [goalTitle, setGoalTitle] = useState('');
@@ -9,6 +10,8 @@ const CreateSavingGoal: React.FC = () => {
   const [milestones, setMilestones] = useState<string[]>(['']);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
   const navigate = useNavigate(); // Hook to navigate after closing the modal
+
+  const addSavingGoal = useBudgetStore((state) => state.addSavingGoal);
   
   const handleMilestoneChange = (index: number, value: string) => {
     const newMilestones = [...milestones];
@@ -41,7 +44,11 @@ const CreateSavingGoal: React.FC = () => {
       totalAmount: parseFloat(totalAmount.toString()),
       savedAmount: parseFloat(savedAmount.toString()),
       milestones,
+      progress: (parseFloat(savedAmount.toString())/parseFloat(totalAmount.toString())) *100,
+      route: `/goaldetail?goal=${encodeURIComponent(goalTitle.toLowerCase().replace(/\s+/g, '-'))}`,
     };
+
+    addSavingGoal(newGoal);
 
     console.log('Goal created:', newGoal);
     
