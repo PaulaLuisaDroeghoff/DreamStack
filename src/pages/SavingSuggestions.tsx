@@ -2,7 +2,6 @@ import React from 'react';
 import { 
   Coffee, 
   Wifi, 
-  DollarSign, 
   ShoppingCart, 
   Truck, 
   Zap, 

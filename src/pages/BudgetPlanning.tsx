@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useBudgetStore from '../store'; // Correct import for Zustand store
-import { ShoppingBasket, House, ReceiptText, CarFront, RollerCoaster, Dumbbell, Calendar, Plus, Star } from 'lucide-react';
+import {House, Calendar, Plus} from 'lucide-react';
 
 const BudgetPlanner = () => {
   const navigate = useNavigate();
