@@ -1,44 +1,22 @@
 import React, { useState } from 'react';
-import { 
-  Landmark, 
-  Trash2, 
-  PlusCircle, 
-  AlertCircle 
-} from 'lucide-react';
+import { Landmark, Trash2, PlusCircle, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-// Mock data - in a real application, this would come from your backend
-const mockBankConnections = [
-  {
-    id: 1,
-    bankName: 'Barclays',
-    accountType: 'Checking',
-    lastFourDigits: '4321',
-    lastSynced: '2 hours ago'
-  },
-  {
-    id: 2,
-    bankName: 'HSBC',
-    accountType: 'Savings',
-    lastFourDigits: '7890',
-    lastSynced: '1 day ago'
-  }
-];
+import useBudgetStore from '../store'; // Import Zustand store
 
 const BankConnectionsList = () => {
-  const [connections, setConnections] = useState(mockBankConnections);
+  const { bankConnections, removeConnection } = useBudgetStore(); // Access Zustand store
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [accountToRemove, setAccountToRemove] = useState(null);
+  const [accountToRemove, setAccountToRemove] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  const initiateRemoveConnection = (id) => {
+  const initiateRemoveConnection = (id: number) => {
     setAccountToRemove(id);
     setShowConfirmModal(true);
   };
 
   const confirmRemoveConnection = () => {
     if (accountToRemove) {
-      setConnections(connections.filter(conn => conn.id !== accountToRemove));
+      removeConnection(accountToRemove); // Remove connection via Zustand
       setShowConfirmModal(false);
       setAccountToRemove(null);
     }
@@ -62,14 +40,14 @@ const BankConnectionsList = () => {
             <AlertCircle size={48} className="mx-auto mb-4" />
             <p className="font-bold mb-4">Are you sure you want to disconnect this account?</p>
             <div className="flex justify-center space-x-4">
-              <button 
-                onClick={cancelRemoveConnection} 
+              <button
+                onClick={cancelRemoveConnection}
                 className="px-4 py-2 border-2 border-black font-bold"
               >
                 Cancel
               </button>
-              <button 
-                onClick={confirmRemoveConnection} 
+              <button
+                onClick={confirmRemoveConnection}
                 className="px-4 py-2 bg-black text-white font-bold"
               >
                 Disconnect
@@ -88,7 +66,7 @@ const BankConnectionsList = () => {
         </div>
 
         {/* Connections List */}
-        {connections.length === 0 ? (
+        {bankConnections.length === 0 ? (
           <div className="text-center py-8">
             <AlertCircle size={48} className="mx-auto mb-4" />
             <p className="font-bold">No bank accounts connected</p>
@@ -96,11 +74,8 @@ const BankConnectionsList = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {connections.map((connection) => (
-              <div 
-                key={connection.id} 
-                className="p-4 flex justify-between items-center"
-              >
+            {bankConnections.map((connection) => (
+              <div key={connection.id} className="p-4 flex justify-between items-center">
                 <div>
                   <div className="flex items-center mb-2">
                     <Landmark size={20} className="mr-2" />
@@ -111,7 +86,7 @@ const BankConnectionsList = () => {
                     <p className="text-gray-600">Last synced: {connection.lastSynced}</p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => initiateRemoveConnection(connection.id)}
                   className="hover:bg-gray-100 p-2 rounded-full"
                 >
@@ -124,7 +99,7 @@ const BankConnectionsList = () => {
 
         {/* Add Connection Button */}
         <div className="mt-6">
-          <button 
+          <button
             onClick={handleAddNewConnection}
             className="w-full bg-black text-white p-3 font-bold flex items-center justify-center hover:bg-gray-800"
           >

@@ -1,53 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Trash2, PlusCircle, Edit3 } from 'lucide-react';
+import useBudgetStore from '../store';
 
-// Mock transactions data
-const transactionsData = {
-  entertainment: [
-    { id: 1, transaction: 'Cinema Tickets', category: 'Entertainment', amount: 50.0, date: '2025-03-09' },
-    { id: 2, transaction: 'Theater Show', category: 'Entertainment', amount: 60.0, date: '2025-03-08' },
-    { id: 3, transaction: 'Concert', category: 'Entertainment', amount: 75.0, date: '2025-03-06' },
-    { id: 4, transaction: 'Amusement Park', category: 'Entertainment', amount: 82.0, date: '2025-03-05' },
-  ],
-  groceries: [
-    { id: 1, transaction: 'Tesco', category: 'Grocery', amount: 50.5, date: '2025-03-09' },
-    { id: 2, transaction: 'Waitrose', category: 'Grocery', amount: 16.8, date: '2025-03-09' },
-    { id: 3, transaction: 'M&S Food', category: 'Grocery', amount: 20.65, date: '2025-03-08' },
-    { id: 4, transaction: 'Asda', category: 'Grocery', amount: 102.3, date: '2025-03-06' },
-  ],
-  rent: [
-    { id: 1, transaction: 'Flat Rent', category: 'Rent', amount: 1000.0, date: '2025-03-09' },
-    { id: 2, transaction: 'Parking Spot Rent', category: 'Rent', amount: 200.0, date: '2025-03-08' },
-  ],
-  sports: [
-    { id: 1, transaction: 'Gym Membership', category: 'Sports', amount: 50.0, date: '2025-03-09' },
-    { id: 2, transaction: 'Tennis Lessons', category: 'Sports', amount: 40.0, date: '2025-03-08' },
-    { id: 3, transaction: 'Swimming Pool', category: 'Sports', amount: 30.0, date: '2025-03-06' },
-    { id: 4, transaction: 'Yoga Class', category: 'Sports', amount: 30.0, date: '2025-03-05' },
-  ],
-  transportation: [
-    { id: 1, transaction: 'Bus Ticket', category: 'Transport', amount: 15.0, date: '2025-03-09' },
-    { id: 2, transaction: 'Train Ride', category: 'Transport', amount: 20.0, date: '2025-03-08' },
-    { id: 3, transaction: 'Taxi', category: 'Transport', amount: 18.0, date: '2025-03-06' },
-    { id: 4, transaction: 'Bike Rental', category: 'Transport', amount: 10.0, date: '2025-03-05' },
-  ],
-  utilities: [
-    { id: 1, transaction: 'Water Bill', category: 'Utilities', amount: 20.0, date: '2025-03-09' },
-    { id: 2, transaction: 'Gas', category: 'Utilities', amount: 15.0, date: '2025-03-08' },
-    { id: 3, transaction: 'Wifi', category: 'Utilities', amount: 20.0, date: '2025-03-06' },
-    { id: 4, transaction: 'Electricity', category: 'Utilities', amount: 20.0, date: '2025-03-05' },
-  ]
-  // Add other categories as needed
+
+type Transaction = {
+  id: number;
+  transaction: string;
+  category: string;
+  amount: number;
+  date: string;  // or Date if that's more appropriate
 };
 
 const Transactions = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const budgetCategory = queryParams.get('budget') || 'entertainment';
+  const budgetCategory = queryParams.get('budget') || 'entertainment'.toLowerCase();
 
-  const [transactions, setTransactions] = useState(transactionsData[budgetCategory] || []);
+  // Use Zustand store for transactions
+  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useBudgetStore();
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+
+  // Instead of declaring filteredTransactions locally, directly use filtered ones:
+  useEffect(() => {
+    const filtered = transactions[budgetCategory] || [];
+    setFilteredTransactions(filtered); // If no transactions found, set it to an empty array
+  }, [transactions, budgetCategory]);
+
   const [editId, setEditId] = useState<number | null>(null);
   const [editTransaction, setEditTransaction] = useState({
     transaction: '',
@@ -56,8 +36,16 @@ const Transactions = () => {
     date: '',
   });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditTransaction((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleEdit = (id: number) => {
-    const transactionToEdit = transactions.find((t) => t.id === id);
+    const transactionToEdit = filteredTransactions.find((t) => t.id === id);
     if (transactionToEdit) {
       setEditId(id);
       setEditTransaction({
@@ -70,17 +58,16 @@ const Transactions = () => {
   };
 
   const handleSave = (id: number) => {
-    setTransactions(
-      transactions.map((t) =>
-        t.id === id ? { ...t, ...editTransaction, amount: parseFloat(editTransaction.amount) } : t
-      )
-    );
-    setEditId(null);
-  };
+    const updatedTransaction = {
+      id,
+      transaction: editTransaction.transaction,
+      category: editTransaction.category,
+      amount: parseFloat(editTransaction.amount),
+      date: editTransaction.date,
+    };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEditTransaction((prev) => ({ ...prev, [name]: value }));
+    updateTransaction(budgetCategory.toLowerCase(), id, updatedTransaction);
+    setEditId(null);
   };
 
   const handleAddTransaction = () => {
@@ -94,22 +81,32 @@ const Transactions = () => {
   };
 
   const handleSaveNewTransaction = () => {
-    const newTransaction = {
-      id: transactions.length ? transactions[transactions.length - 1].id + 1 : 1,
-      transaction: editTransaction.transaction,
-      category: editTransaction.category,
-      amount: parseFloat(editTransaction.amount),
-      date: editTransaction.date,
-    };
-    setTransactions(
-      [...transactions, newTransaction].sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      )
-    );
-    setEditId(null);
+    // Make sure the input fields are valid
+    if (editTransaction.transaction && editTransaction.amount && editTransaction.date) {
+      const newTransaction = {
+        id: filteredTransactions.length ? filteredTransactions[filteredTransactions.length - 1].id + 1 : 1,
+        transaction: editTransaction.transaction,
+        category: editTransaction.category,
+        amount: parseFloat(editTransaction.amount),
+        date: editTransaction.date,
+      };
+  
+      // Add the new transaction to the store
+      addTransaction(budgetCategory, newTransaction);
+  
+      // Clear the form and reset states
+      setEditTransaction({
+        transaction: '',
+        category: budgetCategory.charAt(0).toUpperCase() + budgetCategory.slice(1),
+        amount: '',
+        date: '',
+      });
+  
+      setEditId(null);  // Reset the edit mode
+    }
   };
 
-  const totalSpending = transactions.reduce((total, t) => total + t.amount, 0);
+  const totalSpending = filteredTransactions.reduce((total, t) => total + t.amount, 0);
 
   const handleNavigateToBudgetPlanning = () => {
     navigate('/budgetplanning');
@@ -132,7 +129,7 @@ const Transactions = () => {
           </tr>
         </thead>
         <tbody>
-          {transactions.map((t) => (
+          {filteredTransactions.map((t) => (
             <tr key={t.id} className="hover:bg-gray-50">
               <td className="p-3 border border-gray-200">
                 {editId === t.id ? (
@@ -208,9 +205,7 @@ const Transactions = () => {
                 <Trash2
                   className="text-gray-400 cursor-pointer"
                   size={24}
-                  onClick={() =>
-                    setTransactions(transactions.filter((tr) => tr.id !== t.id))
-                  }
+                  onClick={() => deleteTransaction(budgetCategory.toLowerCase(), t.id)} // Correct usage
                 />
               </td>
             </tr>

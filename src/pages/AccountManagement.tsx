@@ -1,49 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Bell, BellOff, Edit, Trash } from 'lucide-react';
+import useBudgetStore from '../store'; // Import Zustand store
 
 const AccountManagement = () => {
-  const [formData, setFormData] = useState({
-    firstName: 'David',
-    lastName: 'Smith',
-    dateOfBirth: '1990-01-01',
-    street: '123 Main St',
-    postCode: '12345',
-    city: 'London',
-    country: 'United Kingdom',
-    email: 'user@dreamstack.com',
-    notificationsEnabled: true,
-  });
-
-  const [editingField, setEditingField] = useState<string | null>(null);
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: '',
-    newPassword: '',
-  });
-  const [passwordMessage, setPasswordMessage] = useState('');
-
-  // For delete confirmation
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const {
+    userData,
+    passwordData,
+    passwordMessage,
+    editingField,
+    isPasswordModalOpen,
+    isDeleteModalOpen,
+    updateUserData,
+    toggleNotifications,
+    setEditingField,
+    handlePasswordChange,
+    setPasswordMessage,
+    togglePasswordModal,
+    toggleDeleteModal,
+    resetPasswordData,
+  } = useBudgetStore();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value, type, checked } = e.target;
+  
+    // If it's a checkbox (boolean), use `checked`, otherwise use `value`
+    const newValue = type === 'checkbox' ? checked : value;
+  
+    // Only update the userData with the correct type
+    updateUserData(name, newValue as string); // Ensuring it is treated as a string
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordData((prevData) => ({
-      ...prevData,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const toggleNotifications = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      notificationsEnabled: !prevData.notificationsEnabled,
-    }));
+  const handlePasswordSubmit = () => {
+    const passwordRequirements = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+    if (!passwordRequirements.test(passwordData.newPassword)) {
+      setPasswordMessage('New password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
+    } else {
+      setPasswordMessage('Password changed successfully!');
+      resetPasswordData();
+    }
   };
 
   const handleEditField = (field: string) => {
@@ -53,7 +47,6 @@ const AccountManagement = () => {
       setEditingField(field);
     }
   };
-  
 
   const handleSave = () => {
     setEditingField(null);
@@ -65,23 +58,10 @@ const AccountManagement = () => {
     }
   };
 
-  const handlePasswordSubmit = () => {
-    const passwordRequirements = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
-    if (!passwordRequirements.test(passwordData.newPassword)) {
-      setPasswordMessage('New password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
-    } else {
-      setPasswordMessage('Password changed successfully!');
-      setPasswordData({ oldPassword: '', newPassword: '' });
-    }
+  const handleDeleteAccount = () => {
+    console.log("Account deleted");
+    window.location.href = '/login'; // Redirect to login page
   };
-
-    // Handle account deletion
-    const handleDeleteAccount = () => {
-      // Here you would add logic to delete the account from your system (e.g., API call)
-      console.log("Account deleted");
-      // Redirect to login page after deletion
-      window.location.href = '/login'; // Redirect to login page
-    };
 
   return (
     <div className="min-h-screen bg-white p-8">
@@ -92,162 +72,44 @@ const AccountManagement = () => {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Account Information</h2>
           <div className="space-y-4">
-            {/* First Name */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">First Name:</label>
-              {editingField === 'firstName' ? (
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.firstName}</span>
-              )}
-              <button
-                onClick={() => handleEditField('firstName')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* Last Name */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">Last Name:</label>
-              {editingField === 'lastName' ? (
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.lastName}</span>
-              )}
-              <button
-                onClick={() => handleEditField('lastName')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* Date of Birth */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">Date of Birth:</label>
-              {editingField === 'dateOfBirth' ? (
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.dateOfBirth}</span>
-              )}
-              <button
-                onClick={() => handleEditField('dateOfBirth')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* Street */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">Street & House No:</label>
-              {editingField === 'street' ? (
-                <input
-                  type="text"
-                  name="street"
-                  value={formData.street}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.street}</span>
-              )}
-              <button
-                onClick={() => handleEditField('street')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* Postcode */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">Postcode:</label>
-              {editingField === 'postCode' ? (
-                <input
-                  type="text"
-                  name="postCode"
-                  value={formData.postCode}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.postCode}</span>
-              )}
-              <button
-                onClick={() => handleEditField('postCode')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* City */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">City:</label>
-              {editingField === 'city' ? (
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.city}</span>
-              )}
-              <button
-                onClick={() => handleEditField('city')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
-            {/* Country */}
-            <div className="flex items-center">
-              <label className="font-medium w-48">Country:</label>
-              {editingField === 'country' ? (
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  className="border rounded px-3 py-2 flex-grow"
-                />
-              ) : (
-                <span className="flex-grow">{formData.country}</span>
-              )}
-              <button
-                onClick={() => handleEditField('country')}
-                className="ml-2 text-gray-500 hover:text-gray-700"
-              >
-                <Edit size={20} />
-              </button>
-            </div>
+            {['firstName', 'lastName', 'dateOfBirth', 'street', 'postCode', 'city', 'country'].map((field) => (
+              <div className="flex items-center" key={field}>
+                <label className="font-medium w-48">{field.replace(/([A-Z])/g, ' $1').toUpperCase()}:
+                </label>
+                {editingField === field ? (
+                  field === 'notificationsEnabled' ? (
+                    <input
+                      type="checkbox"
+                      name={field}
+                      checked={userData[field as keyof typeof userData] as boolean}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      className="flex-grow"
+                    />
+                  ) : (
+                    <input
+                      type={field === 'dateOfBirth' ? 'date' : 'text'}
+                      name={field}
+                      value={String(userData[field as keyof typeof userData])}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      className="border rounded px-3 py-2 flex-grow"
+                    />
+                  )
+                ) : (
+                  <span className="flex-grow">{userData[field as keyof typeof userData]}</span>
+                )}
+                <button
+                  onClick={() => handleEditField(field)}
+                  className="ml-2 text-gray-500 hover:text-gray-700"
+                >
+                  <Edit size={20} />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
+
         {/* Notification Settings */}
         <div>
           <h2 className="text-2xl font-semibold mb-4">Notification Settings</h2>
@@ -257,14 +119,14 @@ const AccountManagement = () => {
               onClick={toggleNotifications}
               className="ml-2 flex items-center text-gray-500 hover:text-gray-700"
             >
-              {formData.notificationsEnabled ? (
+              {userData.notificationsEnabled ? (
                 <Bell size={20} />
               ) : (
                 <BellOff size={20} />
               )}
             </button>
             <span className="ml-3 text-gray-700">
-              {formData.notificationsEnabled ? 'On' : 'Off'}
+              {userData.notificationsEnabled ? 'On' : 'Off'}
             </span>
           </div>
         </div>
@@ -280,13 +142,13 @@ const AccountManagement = () => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
+                  value={userData.email}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
                   className="border rounded px-3 py-2 flex-grow"
                 />
               ) : (
-                <span className="flex-grow">{formData.email}</span>
+                <span className="flex-grow">{userData.email}</span>
               )}
               <button
                 onClick={() => handleEditField('email')}
@@ -300,7 +162,7 @@ const AccountManagement = () => {
             <div className="flex items-center">
               <label className="font-medium w-48">Password:</label>
               <button
-                onClick={() => setIsPasswordModalOpen(true)}
+                onClick={togglePasswordModal}
                 className="text-black underline flex-grow"
               >
                 Change Password
@@ -309,9 +171,10 @@ const AccountManagement = () => {
           </div>
         </div>
       </div>
+
       {/* Delete Account Button */}
       <button
-        onClick={() => setIsDeleteModalOpen(true)}
+        onClick={toggleDeleteModal}
         className="absolute bottom-4 left-4 text-black flex items-center"
       >
         <Trash size={20} />
@@ -320,67 +183,65 @@ const AccountManagement = () => {
 
       {/* Delete Account Confirmation Modal */}
       {isDeleteModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Are you sure you want to delete your account?</h2>
-            <p className="mb-4 text-gray-700">This action cannot be undone. And you might never achieve your svaing goals...</p>
-            <div className="flex justify-between">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteAccount}
-                className="bg-black text-white px-4 py-2 rounded"
-              >
-                Yes, Delete Account
-              </button>
-            </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded shadow-md max-w-sm w-full">
+            <h2 className="text-2xl font-semibold mb-4">Are you sure?</h2>
+            <p className="mb-4">This action cannot be undone.</p>
+            <button
+              onClick={handleDeleteAccount}
+              className="bg-red-500 text-white py-2 px-4 rounded mr-2"
+            >
+              Yes, Delete
+            </button>
+            <button
+              onClick={toggleDeleteModal}
+              className="bg-gray-300 text-black py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
 
-      {/* Password Change Modal */}
+      {/* Password Modal */}
       {isPasswordModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Change Password</h2>
-            <div className="space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-8 rounded shadow-md max-w-sm w-full">
+            <h2 className="text-2xl font-semibold mb-4">Change Password</h2>
+            <div className="mb-4">
+              <label className="block font-medium mb-2">Old Password:</label>
               <input
                 type="password"
-                name="oldPassword"
                 value={passwordData.oldPassword}
-                onChange={handlePasswordChange}
-                placeholder="Old Password"
+                onChange={(e) => handlePasswordChange('oldPassword', e.target.value)}
                 className="border rounded px-3 py-2 w-full"
               />
+            </div>
+            <div className="mb-4">
+              <label className="block font-medium mb-2">New Password:</label>
               <input
                 type="password"
-                name="newPassword"
                 value={passwordData.newPassword}
-                onChange={handlePasswordChange}
-                placeholder="New Password"
+                onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
                 className="border rounded px-3 py-2 w-full"
               />
+            </div>
+            {passwordMessage && (
+              <p className="text-red-500 text-sm mb-4">{passwordMessage}</p>
+            )}
+            <div className="flex justify-between">
               <button
                 onClick={handlePasswordSubmit}
-                className="bg-black text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white py-2 px-4 rounded"
               >
-                Submit
+                Save
               </button>
               <button
-                onClick={() => setIsPasswordModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700 mt-2"
+                onClick={togglePasswordModal}
+                className="bg-gray-300 text-black py-2 px-4 rounded"
               >
-                Close
+                Cancel
               </button>
-              {passwordMessage && (
-                <p className={`mt-2 text-sm ${passwordMessage.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>
-                  {passwordMessage}
-                </p>
-              )}
             </div>
           </div>
         </div>

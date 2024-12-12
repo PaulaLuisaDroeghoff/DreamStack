@@ -6,6 +6,8 @@ import {
   AlertTriangle,
   ArrowRight,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import useBudgetStore from '../store'; 
 
 const OpenBankingConnection = () => {
   const [accountType, setAccountType] = useState('local');
@@ -19,6 +21,9 @@ const OpenBankingConnection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for "Account Found"
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false); // Modal state for success
   const [isVerificationPending, setIsVerificationPending] = useState(false); // Control verification state
+
+  const addConnection = useBudgetStore((state) => state.addConnection); // Accessing Zustand store function
+  const navigate = useNavigate(); // Initialize navigate
 
   // Sample local and international bank lists
   const localBanks = ['Barclays', 'HSBC', 'Lloyds', 'NatWest'];
@@ -51,6 +56,26 @@ const OpenBankingConnection = () => {
     // Close the "Account Found" modal and show the success modal
     setIsModalOpen(false);
     setIsSuccessModalOpen(true);
+
+    // Add the new connection to Zustand store
+    const newConnection = {
+      id: Date.now(), // Use a unique id (for simplicity, using the current timestamp)
+      bankName,
+      accountType,
+      accountNumber: accountType === 'local' ? accountNumber : '',
+      sortCode: accountType === 'local' ? sortCode : '',
+      iban: accountType === 'international' ? iban : '',
+      bic: accountType === 'international' ? bic : '',
+      lastSynced: 'Just now', // You can add logic to track the last synced time
+      lastFourDigits: accountType === 'local' ? accountNumber.slice(-4) : iban.slice(-4), // Extract last four digits
+    };
+
+    addConnection(newConnection); // Add the new connection to the Zustand store
+  };
+
+  const handleCloseSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    navigate('/bankconnections'); // Redirect to bankconnections page
   };
 
   return (
@@ -243,7 +268,7 @@ const OpenBankingConnection = () => {
             <h3 className="text-xl font-bold">Connection Created Successfully!</h3>
             <div className="mt-4">
               <button
-                onClick={() => setIsSuccessModalOpen(false)}
+                onClick={handleCloseSuccessModal}
                 className="bg-black text-white px-4 py-2 rounded"
               >
                 Close

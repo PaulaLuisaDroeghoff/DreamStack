@@ -73,7 +73,7 @@ const SavingGoals = () => {
               <div className="w-32 h-32">
                 <CircularProgressbar
                   value={goal.progress}
-                  text={`${goal.progress}%`}
+                  text={`${Math.round(goal.progress)}%`}
                   strokeWidth={8}
                   styles={buildStyles({
                     pathColor: '#000000',
