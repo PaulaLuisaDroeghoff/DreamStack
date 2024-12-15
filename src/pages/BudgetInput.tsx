@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Calendar } from "lucide-react"; // Import Lucide icons
 import { useNavigate } from "react-router-dom"; // Use navigate to redirect
 import { useToast } from "../components/ui/hooks/use-toast";
+import useBudgetStore from "../store";
 
 const initialSavingGoals = [
     { id: 1, title: "Beach Vacation", image: "Umbrella.png", targetAmount: 2000, remainingAmount: 600, allocatedAmount: 0 },
@@ -14,10 +15,11 @@ const BudgetAllocation: React.FC = () => {
     const [spendingBudget, setSpendingBudget] = useState(""); // Budget for spending
     const [savingGoals, setSavingGoals] = useState(initialSavingGoals); // List of saving goals
     const [showModal, setShowModal] = useState(false); // Modal state to control visibility
-
+    const updateTotalBudget = useBudgetStore((state) => state.updateTotalBudget);
     const navigate = useNavigate(); // Hook for navigation
 
     const {toast} = useToast();
+
 
     // Get the current month
     const currentMonth = new Date().toLocaleString("default", { month: "long", year: "numeric" });
@@ -46,7 +48,10 @@ const BudgetAllocation: React.FC = () => {
             toast({title: "Budget allocated successfully!"});
             setShowModal(true); // Show modal upon successful submission
         }
+        updateTotalBudget(Number(totalBudget));
     };
+     // Update Zustand's total budget
+    
 
     // Handle modal close and redirect
     const handleModalClose = () => {

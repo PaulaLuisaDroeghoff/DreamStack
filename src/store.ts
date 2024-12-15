@@ -82,7 +82,7 @@ interface BudgetState extends AccountManagementState {
   savingGoals: SavingGoal[];
   addSavingGoal: (goal: SavingGoal) => void;
   deleteSavingGoal: (index: number) => void;
-
+  updateTotalBudget: (newBudget: number) => void;
   transactions: Record<string, Transaction[]>; // key is category, value is list of transactions for that category
   addTransaction: (category: string, transaction: Transaction) => void;
   updateTransaction: (category: string, id: number, updatedTransaction: Partial<Transaction>) => void;
@@ -101,6 +101,10 @@ const useBudgetStore = create<BudgetState>()(
         { icon: 'Dumbbell', title: 'Sports', amount: 150, route: '/transactions?budget=sports' },
       ],
       totalBudget: 2900,
+      updateTotalBudget: (newBudget: number) =>
+        set((state) => ({
+          totalBudget: state.totalBudget + newBudget,
+        })),
       addCategory: (newCategory) =>
         set((state) => ({
           categories: [...state.categories, newCategory],
@@ -147,6 +151,12 @@ const useBudgetStore = create<BudgetState>()(
       deleteSavingGoal: (index) =>
         set((state) => ({
           savingGoals: state.savingGoals.filter((_, i) => i !== index),
+        })),
+      updateSavingGoalAmount: (goalTitle: string, newSavedAmount: number) =>
+        set((state) => ({
+          savingGoals: state.savingGoals.map((goal) =>
+            goal.title === goalTitle ? { ...goal, savedAmount: newSavedAmount } : goal
+          ),
         })),
       transactions: {
         entertainment: [

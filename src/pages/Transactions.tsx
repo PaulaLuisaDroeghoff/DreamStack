@@ -24,7 +24,7 @@ const Transactions = () => {
 
   // Instead of declaring filteredTransactions locally, directly use filtered ones:
   useEffect(() => {
-    const filtered = transactions[budgetCategory] || [];
+    const filtered = Array.isArray(transactions[budgetCategory]) ? transactions[budgetCategory] : [];
     setFilteredTransactions(filtered); // If no transactions found, set it to an empty array
   }, [transactions, budgetCategory]);
 
