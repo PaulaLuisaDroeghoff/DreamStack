@@ -106,6 +106,7 @@ const Transactions = () => {
     }
   };
 
+
   const totalSpending = filteredTransactions.reduce((total, t) => total + t.amount, 0);
 
   const handleNavigateToBudgetPlanning = () => {
@@ -185,9 +186,9 @@ const Transactions = () => {
                       const value = e.target.value.replace(/[^\d]/g, '');
                       let formattedValue = value;
                       if (value.length > 4)
-                        formattedValue = `${value.slice(0, 4)}/${value.slice(4, 6)}/${value.slice(6, 8)}`;
+                        formattedValue = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
                       else if (value.length > 2)
-                        formattedValue = `${value.slice(0, 4)}/${value.slice(4, 6)}`;
+                        formattedValue = `${value.slice(0, 4)}-${value.slice(4, 6)}`;
                       setEditTransaction((prev) => ({ ...prev, date: formattedValue }));
                     }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSave(t.id)}
@@ -253,9 +254,9 @@ const Transactions = () => {
                     const value = e.target.value.replace(/[^\d]/g, '');
                     let formattedValue = value;
                     if (value.length > 4)
-                      formattedValue = `${value.slice(0, 4)}/${value.slice(4, 6)}/${value.slice(6, 8)}`;
+                      formattedValue = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
                     else if (value.length > 2)
-                      formattedValue = `${value.slice(0, 4)}/${value.slice(4, 6)}`;
+                      formattedValue = `${value.slice(0, 4)}-${value.slice(4, 6)}`;
                     setEditTransaction((prev) => ({ ...prev, date: formattedValue }));
                   }}
                   onKeyDown={(e) => e.key === 'Enter' && handleSaveNewTransaction()}
