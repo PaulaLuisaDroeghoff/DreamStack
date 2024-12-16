@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./globals.css";
 import App from "./App";
 import BudgetPlanning from "./pages/BudgetPlanning";
@@ -29,6 +29,7 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<App />}>
+        <Route index element={<Navigate to="/budgetplanning" />} />
           <Route path="createaccount" element={<CreateAccount />} />
           <Route path="savings" element={<SavingGoals />} />
           <Route path="budgetplanning" element={<BudgetPlanning />} />
