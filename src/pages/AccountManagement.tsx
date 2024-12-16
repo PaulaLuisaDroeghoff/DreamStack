@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Bell, BellOff, Edit, Trash } from 'lucide-react';
 import useBudgetStore from '../store'; // Import Zustand store
 
@@ -20,6 +20,8 @@ const AccountManagement = () => {
     resetPasswordData,
   } = useBudgetStore();
 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
   
@@ -35,8 +37,10 @@ const AccountManagement = () => {
     if (!passwordRequirements.test(passwordData.newPassword)) {
       setPasswordMessage('New password must be at least 8 characters long, include an uppercase letter, a lowercase letter, and a number.');
     } else {
-      setPasswordMessage('Password changed successfully!');
+      setPasswordMessage('');
       resetPasswordData();
+      togglePasswordModal();
+      setIsSuccessModalOpen(true);
     }
   };
 

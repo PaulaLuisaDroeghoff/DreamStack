@@ -15,10 +15,10 @@ const getMockRegistrationOptions = (userId: string): PublicKeyCredentialCreation
   const challenge = crypto.getRandomValues(new Uint8Array(32)).buffer;
   return {
     challenge,
-    rp: { name: "PeerPay" },
+    rp: { name: "DreamStack" },
     user: {
       id: new TextEncoder().encode(userId),
-      name: "PeerPay",
+      name: "DreamStack",
       displayName: "User",
     },
     pubKeyCredParams: [{ type: "public-key", alg: -7 }],
